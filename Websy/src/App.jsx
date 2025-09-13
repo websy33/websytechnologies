@@ -7,19 +7,19 @@ import Portfolio from './Components/Portfolio';
 import Process from './Components/Process';
 import Testimonials from './Components/Testimonials';
 import Blog from './Components/Blog';
-import Contact from './Components/Contact';
-import Footer from './Components/Footer';
-import About from './Components/Pages/About';
-import Careers from './Components/Pages/Careers';
-import Cookies from './Components/Pages/Cookies';
-import Faq from './Components/Pages/Faq';
-import Help from './Components/Pages/Help';
-import Privacy from './Components/Pages/Privacy';
-import Sitemap from './Components/Pages/Sitemap';
-import Support from './Components/Pages/Support';
-import Team from './Components/Pages/Team';
-import Terms from './Components/Pages/Terms';
-import Technologiesused from './Components/Technologiesused';
+import Contact from './Components/Contact.jsx';
+import Footer from './Components/Footer.jsx';
+import About from './Components/Pages/about.jsx';
+import Careers from './Components/Pages/careers.jsx';
+import Cookies from './Components/Pages/cookies.jsx';
+import Faq from './Components/Pages/faq.jsx';
+import Help from './Components/Pages/help.jsx';
+import Privacy from './Components/Pages/privacy.jsx';
+import Sitemap from './Components/Pages/sitemap.jsx';
+import Support from './Components/Pages/support.jsx';
+import Team from './Components/Pages/team.jsx';
+import Terms from './Components/Pages/terms.jsx';
+import Technologiesused from './Components/Technologiesused.jsx';
 
 
 // Layout component to wrap around all pages
