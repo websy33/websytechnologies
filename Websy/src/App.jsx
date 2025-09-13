@@ -7,20 +7,19 @@ import Portfolio from './Components/Portfolio';
 import Process from './Components/Process';
 import Testimonials from './Components/Testimonials';
 import Blog from './Components/Blog';
-import Contact from './Components/Contact.jsx';
-import Footer from './Components/Footer.jsx';
-import About from './Components/Pages/about.jsx';
-import Careers from './Components/Pages/careers.jsx';
-import Cookies from './Components/Pages/cookies.jsx';
-import Faq from './Components/Pages/faq.jsx';
-import Help from './Components/Pages/help.jsx';
-import Privacy from './Components/Pages/privacy.jsx';
-import Sitemap from './Components/Pages/sitemap.jsx';
-import Support from './Components/Pages/support.jsx';
-import Team from './Components/Pages/team.jsx';
-import Terms from './Components/Pages/terms.jsx';
-import Technologiesused from './Components/Technologiesused.jsx';
-
+import Contact from './Components/Contact';
+import Footer from './Components/Footer';
+import About from './Components/Pages/about';
+import Careers from './Components/Pages/careers';
+import Cookies from './Components/Pages/cookies';
+import Faq from './Components/Pages/faq';
+import Help from './Components/Pages/help';
+import Privacy from './Components/Pages/privacy';
+import Sitemap from './Components/Pages/sitemap';
+import Support from './Components/Pages/support';
+import Team from './Components/Pages/team';
+import Terms from './Components/Pages/terms';
+import Technologiesused from './Components/Technologiesused';
 
 // Layout component to wrap around all pages
 const Layout = ({ children, onSearch, searchTerm, onClearSearch, onLogoClick }) => {
@@ -131,62 +130,65 @@ function App() {
     }
   ];
 
-  const portfolioData = [
-    {
-      id: 1,
-      title: 'E-commerce Platform',
-      description: 'A fully responsive online store with payment integration.',
-      image: '/images/portfolio1.jpg',
-      category: 'Web Development',
-      tags: ['ecommerce', 'react', 'nodejs'],
-      technologies: ['React', 'Node.js', 'MongoDB', 'Stripe']
-    },
-    {
-      id: 2,
-      title: 'Fitness App',
-      description: 'Mobile application for tracking workouts and nutrition.',
-      image: '/images/portfolio2.jpg',
-      category: 'Mobile Development',
-      tags: ['fitness', 'health', 'mobile'],
-      technologies: ['React Native', 'Firebase', 'Redux']
-    },
-    {
-      id: 3,
-      title: 'Corporate Website',
-      description: 'Modern website for a financial consulting company.',
-      image: '/images/portfolio3.jpg',
-      category: 'Web Design',
-      tags: ['corporate', 'finance', 'design'],
-      technologies: ['HTML5', 'CSS3', 'JavaScript', 'GSAP']
-    },
-    {
-      id: 4,
-      title: 'Travel Blog',
-      description: 'Interactive blog platform for travel enthusiasts.',
-      image: '/images/portfolio4.jpg',
-      category: 'Web Development',
-      tags: ['travel', 'blog', 'cms'],
-      technologies: ['WordPress', 'PHP', 'MySQL', 'JavaScript']
-    },
-    {
-      id: 5,
-      title: 'Restaurant Booking System',
-      description: 'Reservation system for restaurants with table management.',
-      image: '/images/portfolio5.jpg',
-      category: 'Web Application',
-      tags: ['restaurant', 'booking', 'system'],
-      technologies: ['Vue.js', 'Express', 'MongoDB', 'JWT']
-    },
-    {
-      id: 6,
-      title: 'Healthcare Portal',
-      description: 'Patient management system for healthcare providers.',
-      image: '/images/portfolio6.jpg',
-      category: 'Web Application',
-      tags: ['healthcare', 'portal', 'management'],
-      technologies: ['Angular', '.NET', 'SQL Server', 'Azure']
-    }
-  ];
+ const portfolioData = [
+  {
+    id: 1,
+    title: 'Kashkart Ecommerce',
+    description: 'A fully responsive online store with payment integration and inventory management system.',
+    image: '/images/portfolio1.jpg',
+    category: 'Web Development',
+    tags: ['ecommerce', 'react', 'nodejs', 'mongodb'],
+    technologies: ['React', 'Node.js', 'MongoDB', 'Razorpay'],
+    client: 'Retail Business',
+    date: 'January 2023',
+    projectUrl: 'https://example.com',
+    githubUrl: 'https://github.com/example',
+    featured: true,
+    highlights: [
+      'Increased conversion rate by 45%',
+      'Reduced loading time by 60%',
+      'Mobile-first responsive design'
+    ]
+  },
+  {
+    id: 2,
+    title: 'Traveligo Travel Website',
+    description: 'Comprehensive travel booking platform with flight, hotel, and package booking capabilities.',
+    image: '/images/portfolio2.jpg',
+    category: 'Web Development',
+    tags: ['travel', 'booking', 'responsive', 'react'],
+    technologies: ['React', 'Express.js', 'MySQL', 'Stripe'],
+    client: 'Travel Agency',
+    date: 'March 2023',
+    projectUrl: 'https://example.com',
+    githubUrl: 'https://github.com/example',
+    featured: true,
+    highlights: [
+      'Streamlined booking process',
+      'Integrated multiple payment gateways',
+      'Real-time availability checking'
+    ]
+  },
+  {
+    id: 3,
+    title: 'Websy Technologies Corporate Site',
+    description: 'Modern website for a technology company showcasing services and portfolio.',
+    image: '/images/portfolio3.jpg',
+    category: 'Web Design',
+    tags: ['corporate', 'technology', 'design', 'animation'],
+    technologies: ['HTML5', 'CSS3', 'JavaScript', 'GSAP'],
+    client: 'Websy Technologies',
+    date: 'May 2023',
+    projectUrl: 'https://example.com',
+    githubUrl: 'https://github.com/example',
+    featured: false,
+    highlights: [
+      'Improved user engagement by 70%',
+      'SEO optimized structure',
+      'Accessibility compliant'
+    ]
+  },
+];
 
   const processData = [
     {
