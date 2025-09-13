@@ -1,9 +1,8 @@
-// components/Header.js
 import React, { useState, useEffect, useRef } from 'react';
 import emailjs from 'emailjs-com';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
-const Header = ({ onSearch, onLogoClick }) => {
+const Header = ({ onSearch, onLogoClick, isSinglePage = false }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -28,6 +27,7 @@ const Header = ({ onSearch, onLogoClick }) => {
 
   // For navigation with React Router
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Sample search data
   const searchData = [
@@ -38,7 +38,6 @@ const Header = ({ onSearch, onLogoClick }) => {
     { id: 5, title: 'Project Beta', section: 'portfolio', content: 'E-commerce platform with custom CMS...' },
     { id: 6, title: 'Discovery Phase', section: 'process', content: 'We start by understanding your business needs...' },
     { id: 7, title: 'Client Testimonial - John Doe', section: 'testimonials', content: 'WebsyTechnologies delivered beyond our expectations...' },
-    { id: 8, title: 'Contact Information', section: 'contact', content: 'Get in touch with our team for a free consultation...' },
   ];
 
   // Services dropdown data
@@ -49,15 +48,6 @@ const Header = ({ onSearch, onLogoClick }) => {
     { id: 4, title: 'E-commerce', icon: '🛒', description: 'Online store development', color: 'from-green-500 to-green-700' },
     { id: 5, title: 'Cloud Solutions', icon: '☁️', description: 'Scalable cloud infrastructure', color: 'from-indigo-500 to-indigo-700' },
     { id: 6, title: 'Digital Marketing', icon: '📊', description: 'SEO and online presence', color: 'from-amber-500 to-amber-600' },
-  ];
-
-  // Company links data - updated with icons
-  const companyLinks = [
-    { name: "About Us", href: "/about", icon: "🏢" },
-    { name: "Our Team", href: "/team", icon: "👥" },
-    { name: "Careers", href: "/careers", icon: "💼" },
-    { name: "Blog", href: "/blog", icon: "📝" },
-    { name: "Contact", href: "/contact", icon: "📞" }
   ];
 
   const searchRef = useRef(null);
@@ -118,21 +108,33 @@ const Header = ({ onSearch, onLogoClick }) => {
   }, [showConsultationModal]);
 
   const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    // If we're not on the homepage, navigate there first
+    if (location.pathname !== '/') {
+      navigate('/');
+      // Wait for navigation to complete then scroll to section
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
+    
     setIsMenuOpen(false);
     setShowResults(false);
     setIsSearchFocused(false);
     setIsSearchExpanded(false);
     setSearchQuery('');
     setActiveDropdown(null);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Function to navigate to a new page
-  const navigateToPage = (path) => {
+  // Function to handle navigation
+  const handleNavigation = (path, isSection = false, sectionId = null) => {
     // Close all open menus
     setIsMenuOpen(false);
     setActiveDropdown(null);
@@ -140,8 +142,13 @@ const Header = ({ onSearch, onLogoClick }) => {
     setIsSearchFocused(false);
     setIsSearchExpanded(false);
     
-    // Navigate to the new page
-    navigate(path);
+    if (isSection && sectionId) {
+      // If it's a section link, use scrollToSection
+      scrollToSection(sectionId);
+    } else {
+      // Navigate to the new page
+      navigate(path);
+    }
   };
 
   const handleSearch = (query) => {
@@ -250,10 +257,10 @@ const Header = ({ onSearch, onLogoClick }) => {
       
       // Send email using EmailJS
       await emailjs.send(
-        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+        'service_ov629rm', // Replace with your EmailJS service ID
+        'template_jr1dnto', // Replace with your EmailJS template ID
         templateParams,
-        'YOUR_USER_ID' // Replace with your EmailJS user ID
+        '37pN2ThzFwwhwk7ai' // Replace with your EmailJS user ID
       );
       
       setFormStatus({ submitting: false, submitted: true, error: null });
@@ -287,7 +294,8 @@ const Header = ({ onSearch, onLogoClick }) => {
           <div className="flex justify-between items-center">
             {/* Logo */}
             <div className="flex items-center">
-              <div 
+              <Link 
+                to="/"
                 className="flex items-center space-x-3 cursor-pointer group" 
                 onClick={() => {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -298,14 +306,14 @@ const Header = ({ onSearch, onLogoClick }) => {
               >
                 <div className={`p-2 rounded-xl transition-all duration-500 ${isScrolled ? 'bg-gradient-to-r from-blue-600 to-indigo-700' : 'bg-gradient-to-r from-blue-500 to-indigo-600'} group-hover:scale-110 group-hover:rotate-12 group-hover:shadow-lg shadow-md`}>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-white" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.364 5.636L16.95 7.极速05A7 7 0 1 0 9 12h2a9 9 0 1 1-2.636-6.364z" />
+                    <path d="M18.364 5.636L16.95 7.05A7 7 0 1 0 9 12h2a9 9 0 1 1-2.636-6.364z" />
                   </svg>
                 </div>
-                <div className="极速flex flex-col">
+                <div className="flex flex-col">
                   <h1 className={`text-xl font-bold transition-all duration-500 ${isScrolled ? 'text-slate-800' : 'text-white'} group-hover:text-blue-300`}>Websy Technology</h1>
                   <p className={`text-xs transition-all duration-500 ${isScrolled ? 'text-slate-600' : 'text-blue-100'} group-hover:text-blue-200`}>Innovating Digital Excellence</p>
                 </div>
-              </div>
+              </Link>
             </div>
             
             {/* Desktop Navigation with integrated search */}
@@ -314,7 +322,7 @@ const Header = ({ onSearch, onLogoClick }) => {
                 <button 
                   onClick={() => toggleDropdown('services')}
                   onMouseEnter={() => setActiveDropdown('services')}
-                  className={`flex items-center font-medium transition-all duration-300 px-4 py-2.5 rounded-xl ${isScrolled ? 'text-slate-700 hover:text-blue-600' : 'text-white hover:text-blue-200'} ${activeDropdown === 'services' ? 'bg-blue-50 text-blue-极速600 shadow-md' : ''}`}
+                  className={`flex items-center font-medium transition-all duration-300 px-4 py-2.5 rounded-xl ${isScrolled ? 'text-slate-700 hover:text-blue-600' : 'text-white hover:text-blue-200'} ${activeDropdown === 'services' ? 'bg-blue-50 text-blue-600 shadow-md' : ''}`}
                 >
                   Services
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -325,10 +333,10 @@ const Header = ({ onSearch, onLogoClick }) => {
                 {activeDropdown === 'services' && (
                   <div className="absolute top-full left-0 mt-1 w-96 bg-white rounded-xl shadow-2xl z-50 border border-gray-200 p-5 grid grid-cols-2 gap-4">
                     {servicesData.map(service => (
-                      <div 
+                      <button
                         key={service.id} 
                         className={`p-3 rounded-xl transition-all duration-300 hover:scale-105 cursor-pointer bg-gradient-to-r ${service.color} text-white shadow-md hover:shadow-lg`}
-                        onClick={() => scrollToSection('services')}
+                        onClick={() => handleNavigation('/', true, 'services')}
                       >
                         <div className="flex items-center">
                           <span className="text-2xl mr-3 bg-white/20 p-2 rounded-xl">{service.icon}</span>
@@ -337,46 +345,17 @@ const Header = ({ onSearch, onLogoClick }) => {
                             <p className="text-sm text-blue-100 mt-1">{service.description}</p>
                           </div>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )}
               </div>
               
-              <button onClick={() => scrollToSection('portfolio')} className={`font-medium transition-all duration-300 px-4 py-2.5 rounded-xl ${isScrolled ? 'text-slate-700 hover:text-blue-600' : 'text-white hover:text-blue-200'}`}>
+              <button onClick={() => handleNavigation('/', true, 'portfolio')} className={`font-medium transition-all duration-300 px-4 py-2.5 rounded-xl ${isScrolled ? 'text-slate-700 hover:text-blue-600' : 'text-white hover:text-blue-200'}`}>
                 Portfolio
               </button>
               
-              <div className="relative group">
-                <button 
-                  onClick={() => toggleDropdown('company')}
-                  onMouseEnter={() => setActiveDropdown('company')}
-                  className={`flex items-center font-medium transition-all duration-300 px-4 py-2.5 rounded-xl ${isScrolled ? 'text-slate-700 hover:text-blue-600' : 'text-white hover:text-blue-200'} ${activeDropdown === 'company' ? 'bg-blue-50 text-blue-600 shadow-md' : ''}`}
-                >
-                  Company
-                  <svg xmlns="http://www.w3.org/2000/s极速vg" className="h-4 w-4 ml-1 transition-transform duration-300" fill="none" viewBox="0 极速0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                
-                {activeDropdown === 'company' && (
-                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-xl shadow-2xl z-50 border border-gray-200 py-2 overflow-hidden">
-                    {companyLinks.map((link, index) => (
-                      <Link
-                        key={index}
-                        to={link.href}
-                        className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-all duration-300 text-slate-700 hover:text-blue-600 hover:pl-5 items-center block"
-                        onClick={() => setActiveDropdown(null)}
-                      >
-                        <span className="mr-2">{link.icon}</span>
-                        {link.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-              
-              <button onClick={() => scrollToSection('process')} className={`font-medium transition-all duration-300 px-4 py-2.5 rounded-xl ${isScrolled ? 'text-slate-700 hover:text-blue-600' : 'text-white hover:text-blue-200'}`}>
+              <button onClick={() => handleNavigation('/', true, 'process')} className={`font-medium transition-all duration-300 px-4 py-2.5 rounded-xl ${isScrolled ? 'text-slate-700 hover:text-blue-600' : 'text-white hover:text-blue-200'}`}>
                 Process
               </button>
               
@@ -386,16 +365,16 @@ const Header = ({ onSearch, onLogoClick }) => {
                 className="ml-4 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-medium py-2.5 px-6 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 极速2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
                 Free Consultation
               </button>
               
               {/* Integrated Search Bar */}
-              <div className="relative ml-4" ref={searchRef}>
+              <div className="relative ml极速-4" ref={searchRef}>
                 <form 
                   onSubmit={handleSearchSubmit} 
-                  className={`flex items-center overflow-hidden transition-all duration-500 ${isSearchExpanded ? 'w-64 bg-white shadow-lg' : 'w-10'} ${isScrolled && !isSearchExpanded ? 'bg-gray-100极速' : !isScrolled && !isSearchExpanded ? 'bg-white/20' : ''} rounded-xl`}
+                  className={`flex items-center overflow-hidden transition-all duration-500 ${isSearchExpanded ? 'w-64 bg-white shadow-lg' : 'w-10'} ${isScrolled && !isSearchExpanded ? 'bg-gray-100' : !isScrolled && !isSearchExpanded ? 'bg-white/20' : ''} rounded-xl`}
                 >
                   <input
                     ref={inputRef}
@@ -412,7 +391,7 @@ const Header = ({ onSearch, onLogoClick }) => {
                     className={`p-2 ${isSearchExpanded ? 'pr-3' : ''} ${isScrolled && !isSearchExpanded ? 'text-slate-600' : !isScrolled && !isSearchExpanded ? 'text-white' : 'text-blue-600'} transition-all duration-300 hover:scale-110`}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 极速0 7 7 0 0114 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </button>
                 </form>
@@ -423,7 +402,7 @@ const Header = ({ onSearch, onLogoClick }) => {
                     <div className="py-2">
                       <div className="px-4 py-2 text-xs font-semibold text-slate-500 border-b bg-slate-50">SEARCH RESULTS</div>
                       {searchResults.length > 0 ? (
-                        <ul className="max极速-h-80 overflow-y-auto">
+                        <ul className="max-h-80 overflow-y-auto">
                           {searchResults.map(result => (
                             <li key={result.id}>
                               <button
@@ -459,13 +438,13 @@ const Header = ({ onSearch, onLogoClick }) => {
                 className={`p-2 rounded-full transition-all duration-300 hover:bg-white hover:bg-opacity-20 ${isScrolled ? 'text-slate-700' : 'text-white'}`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth极速={2} d="M21 21极速l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button>
               
               <button 
                 onClick={() => {
-                  setIsMenuOpen(!isMenuOpen);
+                  setIsMenuOpen(!极速isMenuOpen);
                   setIsSearchFocused(false);
                 }}
                 className={`focus:outline-none p-2 rounded-full transition-all duration-300 hover:bg-white hover:bg-opacity-20 ${isScrolled ? 'text-slate-700' : 'text-white'}`}
@@ -500,7 +479,7 @@ const Header = ({ onSearch, onLogoClick }) => {
                   />
                   <button type="submit" className="p-2 text-blue-600 hover:text-blue-700 transition-colors duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 极速0 0114 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={极速2} d="M21 21极速l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </button>
                 </form>
@@ -542,7 +521,7 @@ const Header = ({ onSearch, onLogoClick }) => {
               <div className="flex flex-col space-y-1 p-4">
                 <button 
                   onClick={() => toggleDropdown('mobile-services')}
-                  className="flex justify-between items-center text-slate-700 hover:text-blue-600 font-medium py-3 px-4 text-left rounded-lg hover极速:bg-blue-50 transition-all duration-300"
+                  className="flex justify-between items-center text-slate-700 hover:text-blue-600 font-medium py-3 px-4 text-left rounded-lg hover:bg-blue-50 transition-all duration-300"
                 >
                   <span>Services</span>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -555,7 +534,7 @@ const Header = ({ onSearch, onLogoClick }) => {
                     {servicesData.map(service => (
                       <button 
                         key={service.id}
-                        onClick={() => scrollToSection('services')}
+                        onClick={() => handleNavigation('/', true, 'services')}
                         className="flex items-center py-2 px-3 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-300"
                       >
                         <span className="mr-2 text-lg">{service.icon}</span>
@@ -565,43 +544,17 @@ const Header = ({ onSearch, onLogoClick }) => {
                   </div>
                 )}
                 
-                <button onClick={() => scrollToSection('portfolio')} className="text-slate-700 hover:text-blue-600 font-medium py-3 px-4 text-left rounded-lg hover:bg-blue-50 transition-all duration-300">
+                <button onClick={() => handleNavigation('/', true, 'portfolio')} className="text-slate-700 hover:text-blue-600 font-medium py-3 px-4 text-left rounded-lg hover:bg-blue-50 transition-all duration-300">
                   Portfolio
                 </button>
                 
-                <button 
-                  onClick={() => toggleDropdown('mobile-company')}
-                  className="flex justify-between items-center text-slate-700 hover:text-blue-600 font-medium py-3 px-4 text-left rounded-lg hover:bg-blue-50 transition-all duration-300"
-                >
-                  <span>Company</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transition-transform duration-300" fill="极速none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                
-                {activeDropdown === 'mobile-company' && (
-                  <div className="pl-6 pr-4 flex flex-col space-y-2 animate-fadeIn">
-                    {companyLinks.map((link, index) => (
-                      <Link
-                        key={index}
-                        to={link.href}
-                        className="text-sm text-slate-600 hover:text-blue-600 py-2 px-3 text-left hover:bg-blue-50 rounded-lg transition-all duration-300 flex items-center"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <span className="mr-2">{link.icon}</span>
-                        {link.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                
-                <button onClick={() => scrollToSection('process')} className="text-slate-700 hover:text-blue-600 font-medium py-3 px-4 text-left rounded-lg hover:bg-blue-50 transition-all duration-300">
+                <button onClick={() => handleNavigation('/', true, 'process')} className="text-slate-700 hover:text-blue-600 font-medium py-3 px-4 text-left rounded-lg hover:bg-blue-50 transition-all duration-300">
                   Process
                 </button>
                 
                 <button onClick={handleConsultationClick} className="mt-2 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-medium py-3 px-4 text-center rounded-xl transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2极速" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2极速h3.28a1 1 0 01.948.684l1.498 4.493a1 1 极速0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   Free Consultation
                 </button>
@@ -631,13 +584,13 @@ const Header = ({ onSearch, onLogoClick }) => {
             </div>
             
             {formStatus.submitted ? (
-              <div className="p-6 text-center">
+              <div className="p极速-6 text-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800">Thank You!</h3>
+                <h3 className="text-xl font-semib极速old text-gray-800">Thank You!</h3>
                 <p className="mt-2 text-gray-600">We've received your request and will contact you shortly.</p>
               </div>
             ) : (
@@ -658,7 +611,7 @@ const Header = ({ onSearch, onLogoClick }) => {
                   </div>
                   
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-极速1">Email Address *</label>
                     <input
                       type="email"
                       id="email"
@@ -685,7 +638,7 @@ const Header = ({ onSearch, onLogoClick }) => {
                   </div>
                   
                   <div>
-                    <label htmlFor="company" className="block text极速-sm font-medium text-gray-700 mb-1">Company</label>
+                    <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">Company</label>
                     <input
                       type="text"
                       id="company"
@@ -723,9 +676,9 @@ const Header = ({ onSearch, onLogoClick }) => {
                   >
                     {formStatus.submitting ? (
                       <span className="flex items-center justify-center">
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white极速" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8极速V0C5.373 0 0 5.373 0 12s5.373 12 12 12v-4a8 8 极速0 01-8-8z"></path>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12s5.373 12 12 12v-4a8 8 0 01-8-8z"></path>
                         </svg>
                         Processing...
                       </span>
@@ -760,7 +713,7 @@ const Header = ({ onSearch, onLogoClick }) => {
         .animate-slideDown {
           animation: slideDown 0.3s ease-out;
         }
-        .animate-scale极速In {
+        .animate-scaleIn {
           animation: scaleIn 0.3s ease-out;
         }
       `}</style>

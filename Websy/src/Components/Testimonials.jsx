@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Process = ({ process, searchTerm, isHighlighted, onSearch }) => {
+const Testimonials = ({ process, searchTerm, isHighlighted, onSearch }) => {
   // Default process data if not passed as prop
   const defaultSteps = [
     {
@@ -261,4 +261,4 @@ const Process = ({ process, searchTerm, isHighlighted, onSearch }) => {
   );
 };
 
-export default Process;
+export default Testimonials;

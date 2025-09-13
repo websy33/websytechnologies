@@ -2,19 +2,25 @@ import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Components/Header';
 import Hero from './Components/Hero';
+import Services from './Components/Services';
+import Portfolio from './Components/Portfolio';
+import Process from './Components/Process';
 import Testimonials from './Components/Testimonials';
 import Blog from './Components/Blog';
 import Contact from './Components/Contact';
 import Footer from './Components/Footer';
-import About from './Components/Pages/about';
-import Careers from './Components/Pages/careers';
-import Cookies from './Components/Pages/cookies';
-import Faq from './Components/Pages/faq';
-import Help from './Components/Pages/help';
-import Privacy from './Components/Pages/privacy';
-import Sitemap from './Components/Pages/sitemap';
-import Support from './Components/Pages/support';
-import Team from './Components/Pages/team';
+import About from './Components/Pages/About';
+import Careers from './Components/Pages/Careers';
+import Cookies from './Components/Pages/Cookies';
+import Faq from './Components/Pages/Faq';
+import Help from './Components/Pages/Help';
+import Privacy from './Components/Pages/Privacy';
+import Sitemap from './Components/Pages/Sitemap';
+import Support from './Components/Pages/Support';
+import Team from './Components/Pages/Team';
+import Terms from './Components/Pages/Terms';
+import Technologiesused from './Components/Technologiesused';
+
 
 // Layout component to wrap around all pages
 const Layout = ({ children, onSearch, searchTerm, onClearSearch, onLogoClick }) => {
@@ -28,6 +34,42 @@ const Layout = ({ children, onSearch, searchTerm, onClearSearch, onLogoClick }) 
       />
       {children}
       <Footer />
+    </>
+  );
+};
+
+// Homepage component with all sections
+const Homepage = ({ 
+  servicesData, 
+  portfolioData, 
+  processData, 
+  testimonialsData,
+  heroRef,
+  servicesRef,
+  portfolioRef,
+  highlightedSections
+}) => {
+  return (
+    <>
+      <div ref={heroRef}>
+        <Hero />
+      </div>
+      <div ref={servicesRef}>
+        <Services 
+          services={servicesData} 
+          isHighlighted={highlightedSections.includes('services')}
+        />
+      </div>
+      <div ref={portfolioRef}>
+        <Portfolio 
+          portfolio={portfolioData} 
+          isHighlighted={highlightedSections.includes('portfolio')}
+        />
+      </div>
+      <Process process={processData} />
+      <Technologiesused />
+      <Testimonials testimonials={testimonialsData} />
+      <Contact />
     </>
   );
 };
@@ -217,6 +259,22 @@ function App() {
       content: 'Our conversion rates improved significantly after implementing their recommendations.',
       avatar: '/images/avatar4.jpg',
       rating: 5
+    },
+    {
+      id: 5,
+      name: 'David Wilson',
+      position: 'CTO, InnovateTech',
+      content: 'Their technical expertise and project management skills made our complex project a success.',
+      avatar: '/images/avatar5.jpg',
+      rating: 5
+    },
+    {
+      id: 6,
+      name: 'Lisa Thompson',
+      position: 'Product Manager, GrowthApp',
+      content: 'The user experience they designed received overwhelmingly positive feedback from our customers.',
+      avatar: '/images/avatar6.jpg',
+      rating: 5
     }
   ];
 
@@ -293,7 +351,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/Blog" element={
+          <Route path="/blog" element={
             <Layout 
               onSearch={handleHeaderSearch}
               searchTerm={searchTerm}
@@ -393,6 +451,46 @@ function App() {
               <Team />
             </Layout>
           } />
+          <Route path="/terms" element={
+            <Layout 
+              onSearch={handleHeaderSearch}
+              searchTerm={searchTerm}
+              onClearSearch={clearSearch}
+              onLogoClick={scrollToTop}
+            >
+              <Terms />
+            </Layout>
+          } />
+          <Route path="/Testimonials" element={
+            <Layout 
+              onSearch={handleHeaderSearch}
+              searchTerm={searchTerm}
+              onClearSearch={clearSearch}
+              onLogoClick={scrollToTop}
+            >
+              <Testimonials testimonials={testimonialsData} />
+            </Layout>
+          } />
+          <Route path="/contact" element={
+            <Layout 
+              onSearch={handleHeaderSearch}
+              searchTerm={searchTerm}
+              onClearSearch={clearSearch}
+              onLogoClick={scrollToTop}
+            >
+              <Contact />
+            </Layout>
+          } />
+          <Route path="/technologies" element={
+            <Layout 
+              onSearch={handleHeaderSearch}
+              searchTerm={searchTerm}
+              onClearSearch={clearSearch}
+              onLogoClick={scrollToTop}
+            >
+              <Technologiesused />
+            </Layout>
+          } />
           <Route path="/" element={
             <Layout 
               onSearch={handleHeaderSearch}
@@ -400,16 +498,16 @@ function App() {
               onClearSearch={clearSearch}
               onLogoClick={scrollToTop}
             >
-              <div ref={heroRef}>
-                <Hero />
-              </div>
-
-             
-
-        
-
-              <Testimonials testimonials={testimonialsData} />
-              <Contact />
+              <Homepage 
+                servicesData={filteredServices}
+                portfolioData={filteredPortfolio}
+                processData={processData}
+                testimonialsData={testimonialsData}
+                heroRef={heroRef}
+                servicesRef={servicesRef}
+                portfolioRef={portfolioRef}
+                highlightedSections={highlightedSections}
+              />
             </Layout>
           } />
         </Routes>

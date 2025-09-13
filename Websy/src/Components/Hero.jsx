@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import emailjs from 'emailjs-com';
 
-const Hero = ({ onViewProducts, onContact }) => {
+const Hero = ({ onContact }) => {
   const [typedText, setTypedText] = useState('');
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [typingSpeed, setTypingSpeed] = useState(150);
+  const [typingSpeed, setTypingSpeed] = useState(130);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -51,7 +51,7 @@ const Hero = ({ onViewProducts, onContact }) => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Typewriter effect
+  // Typewriter effect with adjusted timing
   useEffect(() => {
     const currentText = texts[currentTextIndex];
     
@@ -67,12 +67,14 @@ const Hero = ({ onViewProducts, onContact }) => {
 
       // Check if we've finished typing a word
       if (!isDeleting && typedText === currentText) {
-        // Pause at the end of typing
-        setTimeout(() => setIsDeleting(true), 1000);
+        // Pause at the end of typing (reduced from 1000ms to 800ms)
+        setTimeout(() => setIsDeleting(true), 800);
+        setTypingSpeed(150);
       } else if (isDeleting && typedText === '') {
         // Move to next word after deleting
         setIsDeleting(false);
         setCurrentTextIndex((currentTextIndex + 1) % texts.length);
+        setTypingSpeed(130);
       }
     };
 
@@ -122,35 +124,30 @@ const Hero = ({ onViewProducts, onContact }) => {
     });
   };
 
-  // Parallax effect for background elements
-  const parallaxStyle = {
-    transform: `translate(${mousePosition.x * 30 - 15}px, ${mousePosition.y * 30 - 15}px)`
-  };
-
   return (
     <>
-      <section className="pt-32 pb-20 bg-gradient-to-br from-indigo-900 via-blue-900 to-purple-900 relative overflow-hidden">
+      <section className="pt-32 pb-20 bg-white relative overflow-hidden">
         {/* Animated background elements with parallax */}
-        <div className="absolute top-0 left-0 w-full h-full opacity-20">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10">
           <div 
-            className="absolute top-20 left-10 w-72 h-72 bg-purple-400 rounded-full mix-blend-soft-light filter blur-xl animate-blob"
+            className="absolute top-20 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl animate-blob"
             style={{ transform: `translate(${mousePosition.x * 20 - 10}px, ${mousePosition.y * 20 - 10}px)` }}
           ></div>
           <div 
-            className="absolute top-0 right-10 w-72 h-72 bg-blue-400 rounded-full mix-blend-soft-light filter blur-xl animate-blob animation-delay-2000"
+            className="absolute top-0 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"
             style={{ transform: `translate(${mousePosition.x * 15 - 7.5}px, ${mousePosition.y * 15 - 7.5}px)` }}
           ></div>
           <div 
-            className="absolute bottom-10 left-1/2 w-72 h-72 bg-indigo-400 rounded-full mix-blend-soft-light filter blur-xl animate-blob animation-delay-4000"
+            className="absolute bottom-10 left-1/2 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"
             style={{ transform: `translate(${mousePosition.x * 25 - 12.5}px, ${mousePosition.y * 25 - 12.5}px)` }}
           ></div>
         </div>
 
         {/* Animated grid background */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{
-            backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)`,
             backgroundSize: '50px 50px',
             maskImage: 'radial-gradient(ellipse at center, black 10%, transparent 70%)'
           }}></div>
@@ -163,13 +160,13 @@ const Hero = ({ onViewProducts, onContact }) => {
             return (
               <div
                 key={i}
-                className="absolute rounded-full bg-white opacity-10"
+                className="absolute rounded-full bg-gray-200 opacity-50"
                 style={{
                   width: size + 'px',
                   height: size + 'px',
                   top: Math.random() * 100 + '%',
                   left: Math.random() * 100 + '%',
-                  animation: `float-particle ${Math.random() * 10 + 10}s infinite ease-in-out`,
+                  animation: `float-particle ${Math.random() * 8 + 8}s infinite ease-in-out`,
                   animationDelay: Math.random() * 5 + 's',
                   transform: `translate(${(mousePosition.x - 0.5) * size}px, ${(mousePosition.y - 0.5) * size}px)`
                 }}
@@ -180,15 +177,15 @@ const Hero = ({ onViewProducts, onContact }) => {
 
         {/* Animated circles */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96">
-          <div className="absolute inset-0 border-4 border-blue-500 rounded-full opacity-20 animate-ping"></div>
-          <div className="absolute inset-4 border-4 border-purple-500 rounded-full opacity-20 animate-ping" style={{animationDelay: '1s'}}></div>
-          <div className="absolute inset-8 border-4 border-cyan-500 rounded-full opacity-20 animate-ping" style={{animationDelay: '2s'}}></div>
+          <div className="absolute inset-0 border-4 border-blue-300 rounded-full opacity-20 animate-ping"></div>
+          <div className="absolute inset-4 border-4 border-purple-300 rounded-full opacity-20 animate-ping" style={{animationDelay: '1s'}}></div>
+          <div className="absolute inset-8 border-4 border-cyan-300 rounded-full opacity-20 animate-ping" style={{animationDelay: '2s'}}></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 mb-10 md:mb-0">
-              <div className="inline-block bg-gradient-to-r from-cyan-500/30 to-blue-500/30 text-cyan-200 text-sm px-4 py-2 rounded-full mb-6 font-medium backdrop-blur-sm border border-cyan-500/30 shadow-lg">
+              <div className="inline-block bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-gray-700 text-sm px-4 py-2 rounded-full mb-6 font-medium backdrop-blur-sm border border-gray-300 shadow-lg">
                 <span className="flex items-center">
                   <span className="relative flex h-3 w-3 mr-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
@@ -198,12 +195,12 @@ const Hero = ({ onViewProducts, onContact }) => {
                 </span>
               </div>
               
-              <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
-                Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-300 animate-text-shine">{typedText}</span>
-                <span className="inline-block w-1 h-10 bg-blue-300 ml-1 animate-pulse"></span>
+              <h1 className="text-4xl md:text-6xl font-bold text-gray-800 leading-tight mb-6">
+                Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600 animate-text-shine">{typedText}</span>
+                <span className="inline-block w-1 h-10 bg-blue-600 ml-1 animate-pulse"></span>
               </h1>
               
-              <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 We create stunning, responsive websites that drive growth and enhance your online presence. 
                 Our expert team delivers cutting-edge solutions tailored to your business needs.
               </p>
@@ -241,32 +238,20 @@ const Hero = ({ onViewProducts, onContact }) => {
                     Get Free Consultation
                   </span>
                 </button>
-                <button 
-                  onClick={onViewProducts}
-                  className="relative border-2 border-white border-opacity-30 text-white hover:bg-white hover:bg-opacity-15 font-medium py-4 px-8 rounded-xl transition-all duration-300 flex items-center justify-center shadow-md hover:shadow-lg backdrop-blur-sm overflow-hidden group"
-                >
-                  <span className="absolute inset-0 bg-cyan-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></span>
-                  <span className="relative flex items-center">
-                    View All Products
-                    <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </span>
-                </button>
               </div>
             </div>
             
             <div className="md:w-1/2 relative">
               {/* Main Hero Image with enhanced effects */}
               <div className="relative">
-                <div className="absolute -inset-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl opacity-70 blur-lg animate-pulse"></div>
+                <div className="absolute -inset-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl opacity-30 blur-lg animate-pulse"></div>
                 <div className="relative rounded-2xl shadow-2xl overflow-hidden group">
                   <img 
                     src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
                     alt="Website Development" 
                     className="transform group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 
                 {/* Floating elements with enhanced animations */}
@@ -318,10 +303,10 @@ const Hero = ({ onViewProducts, onContact }) => {
 
           {/* Trust Badges with enhanced hover effects */}
           <div className="mt-20 text-center">
-            <p className="text-blue-200 text-sm mb-6 uppercase tracking-wider font-semibold flex items-center justify-center">
-              <span className="w-8 h-px bg-blue-500 mr-3"></span>
+            <p className="text-gray-600 text-sm mb-6 uppercase tracking-wider font-semibold flex items-center justify-center">
+              <span className="w-8 h-px bg-gray-400 mr-3"></span>
               Trusted by industry leaders worldwide
-              <span className="w-8 h-px bg-blue-500 ml-3"></span>
+              <span className="w-8 h-px bg-gray-400 ml-3"></span>
             </p>
             <div className="flex flex-wrap justify-center items-center gap-6">
               {trustBadges.map((company, index) => (
@@ -492,10 +477,10 @@ const Hero = ({ onViewProducts, onContact }) => {
         .animate-text-shine {
           background: linear-gradient(
             to right,
-            #6EE7B7 20%,
-            #3B82F6 30%,
-            #9333EA 70%,
-            #6EE7B7 80%
+            #0891b2 20%,
+            #2563eb 30%,
+            #7e22ce 70%,
+            #0891b2 80%
           );
           -webkit-background-clip: text;
           background-clip: text;
